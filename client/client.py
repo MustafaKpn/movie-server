@@ -10,13 +10,34 @@ RESET = "\033[0m"
 
 
 class MovieClient:
+    """Client for interacting with the movie server API."""
+
     def __init__(self, base_url: str, username: str, password: str):
+        """
+        Initialize the MovieClient.
+        
+        Args:
+            base_url: The base URL of the movie server
+            username: Authentication username
+            password: Authentication password
+        """
+
         self.base_url = base_url
         self.username = username
         self.password = password
         self.token = None
 
     def authenticate(self):
+        """
+        Authenticate with the server and get a bearer token.
+        
+        Returns:
+            Bearer token for API requests
+            
+        Raises:
+            RuntimeError: If authentication fails
+        """
+
         url = f"{self.base_url}/api/auth"
         payload = {"username": self.username, "password": self.password}
         resp = requests.post(url, json=payload)
@@ -28,6 +49,19 @@ class MovieClient:
 
 
     def count_movies(self, year):
+        """
+        Count all movies for a specific year.
+        
+        Args:
+            year: The year to count movies for
+            
+        Returns:
+            Total number of movies for the year
+            
+        Raises:
+            RuntimeError: If the request fails
+        """
+
         total = 0
         page = 1
 
@@ -56,6 +90,8 @@ class MovieClient:
 
 
 def main():
+    """Main entry point for the movie client."""
+    
     parser = argparse.ArgumentParser(description="Movie counter client")
     parser.add_argument("years", metavar="YEAR", type=int, nargs="+",
                         help="One or more years to count movies for")
