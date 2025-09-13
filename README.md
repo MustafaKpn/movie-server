@@ -1,29 +1,119 @@
-Movie Server
-============
+# Movie Server
 
-This server serves movie lists via a REST API.
+A Go-based movie server with a Python client for counting movies by year. The server provides an authenticated API for retrieving movie data, and the client can count movies for specific years.
 
-Endpoints
-=========
+## Prerequisites
 
-```
-The following endpoints are available:
+- Docker installed on your system
+- Git (for cloning the repository)
 
-POST /api/auth
-	This endpoint allows users to authenticate themselves with the server. Accepts a JSON body with the following format:
-		{"username": "USERNAME", "password": "PASSWORD"}
+## Getting Started
 
-	On a success, the endpoint will return a JSON packet with the following format:
-		{"bearer": "TOKEN", "timeout": TOKEN_LIFETIME}
+### 1. Clone the Repository
 
-GET /api/movies/$YEAR/$PAGE	
-	This endpoint requires the bearer token passed in the Authorization header. Will return a JSON list of upto 10 movies.
+```bash
+git clone git@github.com:MustafaKpn/movie-server-exercise.git
+cd movie-server
 ```
 
-Usage
-=====
+### 2. Build the Docker Image
 
+```bash
+docker build -t movie-server .
 ```
-  -port uint
-    	port to listen on (default 8080)
+
+### 3. Run the Server
+
+To run the server in the foreground:
+
+```bash
+docker run -p 8080:8080 movie-server
+```
+
+The server will be available at `http://localhost:8080`.
+
+### 4. Run the Client
+
+To run the client (which automatically starts the server in the background and stops it when done):
+
+```bash
+docker run movie-server client 2023 2024
+```
+
+This will count movies for the years 2023 and 2024.
+
+## Client Usage
+
+### Basic Examples
+
+```bash
+# Count movies for a single year
+docker run movie-server client 2023
+
+# Count movies for multiple years
+docker run movie-server client 2020 2021 2022 2023
+```
+
+### Advanced Options
+
+```bash
+# Use custom server URL (when connecting to external server)
+docker run movie-server client --server http://example.com:8080 2023
+
+# Use custom authentication credentials
+docker run movie-server client --username myuser --password mypass 2023
+
+# Combine options
+docker run movie-server client --server http://localhost:8080 --username admin --password secret 2020 2021
+```
+
+### Available Client Options
+
+- `--server`: Base URL of the movie server (default: `http://localhost:8080`)
+- `--username`: Authentication username (default: `username`)
+- `--password`: Authentication password (default: `password`)
+
+## Authentication
+
+The server uses bearer token authentication with default credentials:
+
+- **Username**: `username`
+- **Password**: `password`
+
+## Authentication
+
+The server uses bearer token authentication with default credentials:
+
+- **Username**: `username`
+- **Password**: `password`
+
+## Troubleshooting
+
+### Port Already in Use
+
+If you get a port binding error:
+
+```bash
+docker run -p 8081:8080 movie-server
+```
+
+### Container Issues
+
+To see running containers:
+
+```bash
+docker ps
+```
+
+To stop a running container:
+
+```bash
+docker stop <container-id>
+```
+
+To remove the image and rebuild:
+
+```bash
+docker rmi movie-server
+docker build -t movie-server .
 ```
