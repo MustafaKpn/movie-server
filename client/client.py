@@ -8,40 +8,51 @@ CYAN = "\033[96m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-def authenticate(base_url, username, password):
-    url = f"{base_url}/api/auth"
-    payload = {"username": username, "password": password}
-    resp = requests.post(url, json=payload)
-    if resp.status_code != 200:
-        raise RuntimeError(f"Auth failed: {resp.status_code} {resp.text}")
-    return resp.json()["bearer"]
 
-def count_movies(base_url, year, username, password):
-    total = 0
-    page = 1
+class MovieClient:
+    def __init__(self, base_url: str, username: str, password: str):
+        self.base_url = base_url
+        self.username = username
+        self.password = password
+        self.token = None
 
-    print(f"{CYAN}{BOLD}Counting movies for {year}{RESET}:")
-
-    while True:
-        token = authenticate(base_url, username, password)
-        headers = {"Authorization": token}
-
-        url = f"{base_url}/api/movies/{year}/{page}"
-        resp = requests.get(url, headers=headers)
+    def authenticate(self):
+        url = f"{self.base_url}/api/auth"
+        payload = {"username": self.username, "password": self.password}
+        resp = requests.post(url, json=payload)
         if resp.status_code != 200:
-            raise RuntimeError(f"Request failed: {resp.status_code} {resp.text}")
+            raise RuntimeError(f"Auth failed: {resp.status_code} {resp.text}")
+        self.token = resp.json()["bearer"]
+        return self.token
+    
 
-        movies = resp.json()
-        total += len(movies)
 
-        print(f"{GREEN}Total movies so far: {total}{RESET}    ", end='\r', flush=True)
+    def count_movies(self, year):
+        total = 0
+        page = 1
 
-        if len(movies) < 10:
-            break
-        page += 1
+        print(f"{CYAN}{BOLD}Counting movies for {year}{RESET}:")
 
-    print(f"{CYAN}{BOLD}Total movies: {GREEN}{total}{RESET}            \n")
-    return total
+        while True:
+            token = self.authenticate()
+            headers = {"Authorization": token}
+
+            url = f"{self.base_url}/api/movies/{year}/{page}"
+            resp = requests.get(url, headers=headers)
+            if resp.status_code != 200:
+                raise RuntimeError(f"Request failed: {resp.status_code} {resp.text}")
+
+            movies = resp.json()
+            total += len(movies)
+
+            print(f"{GREEN}Total movies so far: {total}{RESET}    ", end='\r', flush=True)
+
+            if len(movies) < 10:
+                break
+            page += 1
+
+        print(f"{CYAN}{BOLD}Total movies: {GREEN}{total}{RESET}            \n")
+        return total
 
 
 def main():
@@ -55,16 +66,17 @@ def main():
     parser.add_argument("--password", default="password",
                         help="Auth password (default: password)")
     args = parser.parse_args()
+    client = MovieClient(args.server, args.username, args.password)
 
     try:
-        authenticate(args.server, args.username, args.password)
+        client.authenticate()
     except Exception as e:
         print(f"Authentication failed: {e}", file=sys.stderr)
         sys.exit(1)
 
     for year in args.years:
         try:
-            count_movies(args.server, year, args.username, args.password)
+            client.count_movies(year)
         except Exception as e:
             print(f"{year}: error: {e}", file=sys.stderr)
 
