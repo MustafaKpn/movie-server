@@ -117,3 +117,50 @@ To remove the image and rebuild:
 docker rmi movie-server
 docker build -t movie-server .
 ```
+
+## Testing Utilities
+
+### 1. Test Docker Setup
+
+You can use the included `test_docker.sh` script to verify that Docker builds the image correctly and that the server starts:
+
+```bash
+./test_docker.sh
+```
+
+### 2. Run Python Client Tests
+
+The file `test_client.py` contains **unit tests** for the Python client logic.  
+These tests are written with [pytest](https://docs.pytest.org/) and **do not require the server to be running**.
+
+#### Run in a virtual environment (recommended)
+
+1. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+2. Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+pip install pytest
+```
+
+3. Run the tests:
+
+```bash
+pytest -v test_client.py
+```
+
+4. When finished, deactivate the virtual environment:
+
+```bash
+deactivate
+```
+
+This will validate:
+
+- Authentication logic (using mocked responses)
+- Movie counting logic
+- Error handling
