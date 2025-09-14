@@ -12,7 +12,7 @@ A Go-based movie server with a Python client for counting movies by year. The se
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:MustafaKpn/movie-server-exercise.git
+git clone git@github.com:MustafaKpn/movie-server.git
 cd movie-server
 ```
 
