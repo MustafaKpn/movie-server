@@ -1,5 +1,4 @@
 #!/bin/bash
-# Minimal Docker functionality test
 
 set -e
 
