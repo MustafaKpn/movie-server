@@ -170,10 +170,10 @@ These tests are written with [pytest](https://docs.pytest.org/) and **do not req
 #### Run in a virtual environment (recommended)
 
 1. Create and activate a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 2. Install the dependencies:
 
 ```bash
