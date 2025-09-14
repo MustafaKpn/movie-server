@@ -57,9 +57,6 @@ docker run movie-server client 1901 1902 1905 2025
 ### Advanced Options
 
 ```bash
-# Use custom server URL (when connecting to external server)
-docker run movie-server client --server http://example.com:8080 2023
-
 # Use custom authentication credentials
 docker run movie-server client --username myuser --password mypass 2023
 
