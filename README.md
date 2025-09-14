@@ -37,10 +37,10 @@ The server will be available at `http://localhost:8080`.
 To run the client (which automatically starts the server in the background and stops it when done):
 
 ```bash
-docker run movie-server client 2023 2024
+docker run movie-server client 1910 2000
 ```
 
-This will count movies for the years 2023 and 2024.
+This will count movies for the years 1910 and 2000.
 
 ## Client Usage
 
@@ -48,10 +48,10 @@ This will count movies for the years 2023 and 2024.
 
 ```bash
 # Count movies for a single year
-docker run movie-server client 2023
+docker run movie-server client 2000
 
 # Count movies for multiple years
-docker run movie-server client 2020 2021 2022 2023
+docker run movie-server client 1901 1902 1905 2025
 ```
 
 ### Advanced Options
