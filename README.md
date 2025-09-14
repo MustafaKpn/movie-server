@@ -161,9 +161,3 @@ This will validate:
 - Authentication logic (using mocked responses)
 - Movie counting logic
 - Error handling
-
-This will validate:
-
-- Authentication logic (using mocked responses)
-- Movie counting logic
-- Error handling
