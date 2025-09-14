@@ -122,6 +122,7 @@ docker build -t movie-server .
 You can use the included `test_docker.sh` script to verify that Docker builds the image correctly and that the server starts:
 
 ```bash
+chmod +x ./test_docker.sh
 ./test_docker.sh
 ```
 
@@ -129,6 +130,8 @@ You can use the included `test_docker.sh` script to verify that Docker builds th
 
 The file `test_client.py` contains **unit tests** for the Python client logic.  
 These tests are written with [pytest](https://docs.pytest.org/) and **do not require the server to be running**.
+#### Prerequisites:
+* Python3
 
 #### Run in a virtual environment (recommended)
 
